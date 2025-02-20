@@ -1,0 +1,50 @@
+services:
+  db:
+    image: postgres:12-alpine
+    environment:
+      POSTGRES_USER: objecttypes
+      POSTGRES_PASSWORD: objecttypes
+    command: postgres -c max_connections=300 -c log_min_messages=LOG
+
+  redis:
+    image: redis
+
+  web:
+    image: maykinmedia/objecttypes-api:latest
+    build: .
+    environment: &app-env
+      DB_USER: objecttypes
+      DB_PASSWORD: objecttypes
+      DJANGO_SETTINGS_MODULE: objecttypes.conf.docker
+      SECRET_KEY: ${SECRET_KEY:-fgv=c0hz&tl*8*3m3893@m+1pstrvidc9e^5@fpspmg%cyf15d}
+      ALLOWED_HOSTS: '*'
+      CACHE_DEFAULT: redis:6379/0
+      CACHE_AXES: redis:6379/0
+      DISABLE_2FA: yes
+      SUBPATH: ${SUBPATH:-/}
+    volumes:
+      - log:/app/log
+    ports:
+      - 8001:8000
+    depends_on:
+      web-init:
+        condition: service_completed_successfully
+
+  web-init:
+    image: maykinmedia/objecttypes-api:latest
+    build: .
+    environment:
+      <<: *app-env
+      #
+      # Django-setup-configuration
+      RUN_SETUP_CONFIG: ${RUN_SETUP_CONFIG:-true}
+    command: /setup_configuration.sh
+    volumes:
+      - log:/app/log
+      - ./docker/setup_configuration:/app/setup_configuration
+    depends_on:
+      - db
+
+volumes:
+  db:
+  log:

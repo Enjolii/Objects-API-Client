@@ -1,0 +1,1 @@
+rootProject.name = "springboot_kotlin_client"
