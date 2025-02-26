@@ -7,15 +7,17 @@ import org.springframework.web.client.RestClient
 
 
 @Service
-class GameService(
+class ObjectsAPIClientOLD(
     @Value("\${api.base.url.object}") private val apiBaseUrl: String,
-    @Value("\${api.token.object}") private val token: String
+    @Value("\${api.token.object}") private val token: String,
+    @Value("\${game.type}") private val gameType: String,
+    @Value("\${movie.type}") private val movieType: String
 ) {
 
     private val restClient: RestClient = RestClient.create(apiBaseUrl)
     private val mapper = jacksonObjectMapper()
 
-    fun getObjects(): List<GameData> {
+    fun getGames(): List<Any> {
         val response = restClient.get()
             .uri("/objects")
             .header("Authorization", "Token $token")
@@ -25,7 +27,23 @@ class GameService(
         return response?.results?.map { it.record.data } ?: emptyList()
     }
 
-    fun createObject(requestData: RequestData): GameData {
+    fun getObjects(): List<Any> {
+        val response = restClient.get()
+            .uri("/objects")
+            .header("Authorization", "Token $token")
+            .retrieve()
+            .body(ApiResponse::class.java)
+
+        return response?.results?.mapNotNull {
+            when {
+                it.type.contains(gameType) -> mapper.convertValue(it.record.data, GameData::class.java)
+                it.type.contains(movieType) -> mapper.convertValue(it.record.data, MovieData::class.java)
+                else -> null
+            }
+        } ?: emptyList()
+    }
+
+    fun createObject(requestData: RequestData): Any {
         val requestBody = mapper.writeValueAsString(requestData)
         val response = restClient.post()
             .uri("/objects")
@@ -39,7 +57,7 @@ class GameService(
         return response?.record?.data ?: throw RuntimeException("Failed to create object")
     }
 
-    fun updateObjectByUUID(objectUUID: String, requestData: RequestData): GameData {
+    fun updateObjectByUUID(objectUUID: String, requestData: RequestData): Any {
         val requestBody = mapper.writeValueAsString(requestData)
         val response = restClient.put()
             .uri("/objects/$objectUUID")
@@ -67,7 +85,7 @@ class GameService(
         }
     }
 
-    fun getObjectByUUID(objectUUID: String): GameData {
+    fun getObjectByUUID(objectUUID: String): Any {
         val response = restClient.get()
             .uri("/objects/$objectUUID")
             .header("Authorization", "Token $token")

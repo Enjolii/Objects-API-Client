@@ -3,21 +3,21 @@ package com.stage.springboot_kotlin.objecttypesApi
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping("/api/games/client")
-class GameController(private val gameService: GameService) {
+@RequestMapping("/api/game/client")
+class GameController(private val gameService: ObjectsAPIClientOLD) {
 
     @GetMapping
-    fun getObjects(): List<GameData> {
+    fun getObjects(): List<Any> {
         return gameService.getObjects()
     }
 
     @PostMapping("/create")
-    fun createObjects(@RequestBody requestData: RequestData): GameData {
+    fun createObjects(@RequestBody requestData: RequestData): Any {
         return gameService.createObject(requestData)
     }
 
     @PutMapping("update/{objectUUID}")
-    fun updateObjectByUUID(@PathVariable objectUUID: String, @RequestBody requestData: RequestData): GameData {
+    fun updateObjectByUUID(@PathVariable objectUUID: String, @RequestBody requestData: RequestData): Any {
         return gameService.updateObjectByUUID(objectUUID, requestData)
     }
 
@@ -27,7 +27,7 @@ class GameController(private val gameService: GameService) {
     }
 
     @GetMapping("/{objectUUID}")
-    fun getObjectByUUID(@PathVariable objectUUID: String): GameData {
+    fun getObjectByUUID(@PathVariable objectUUID: String): Any {
         return gameService.getObjectByUUID(objectUUID)
     }
 }

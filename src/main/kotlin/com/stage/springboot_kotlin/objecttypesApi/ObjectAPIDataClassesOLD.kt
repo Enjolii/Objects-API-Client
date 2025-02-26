@@ -22,7 +22,7 @@ data class RequestData(
 data class Record(
     val index: Int?,
     val typeVersion: Int,
-    val data: GameData,
+    val data: Any,
     val geometry: Any?,
     val startAt: String,
     val endAt: String?,
@@ -37,4 +37,14 @@ data class GameData(
     val genre: String?,
     val beschrijving: String?,
     val releasedatum: String?
+)
+
+data class MovieData(
+    val titel: String,
+    val regisseur: String,
+    val duur: Int,
+    val cast: List<String>?,
+    val genre: String?,
+    val beschrijving: String?,
+    val releasedatum: String?,
 )
