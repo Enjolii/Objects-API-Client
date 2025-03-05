@@ -1,5 +1,6 @@
-package com.stage.springboot_kotlin.objectApi
+package com.stage.springboot_kotlin.objectApi.clients
 
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.JsonNode
 
 data class ObjectsList(
@@ -13,7 +14,7 @@ data class ObjectWrapper(
     val url: String,
     val uuid: String,
     val type: String,
-    val record: Record
+    val record: ObjectRecord
 )
 
 data class ObjectRequest(
@@ -34,6 +35,7 @@ data class ObjectRecord(
     val correctedBy: String?
 )
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class GameData(
     val titel: String,
     val uitgeverij: String,
@@ -42,6 +44,7 @@ data class GameData(
     val releasedatum: String?
 )
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 data class MovieData(
     val titel: String,
     val regisseur: String,

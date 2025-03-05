@@ -1,7 +1,5 @@
-package com.stage.springboot_kotlin.objectApi
+package com.stage.springboot_kotlin.objectApi.clients
 
-import com.stage.springboot_kotlin.objecttypesApi.ApiResponse
-import com.stage.springboot_kotlin.objecttypesApi.Results
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import org.springframework.web.client.RestClient
@@ -14,18 +12,18 @@ class ObjectsAPIClient(
 
     val restClient = RestClient.create(apiBaseUrl)
 
-    fun getObject(): ApiResponse? {
+    fun getObject(): ObjectsList? {
 
         val ApiResponse = restClient.get()
             .uri("/objects")
             .header("Authorization", "Token $token")
             .retrieve()
-            .body(ApiResponse::class.java)
+            .body(ObjectsList::class.java)
 
         return ApiResponse
     }
 
-    fun createObject(objectRequest: String): Results? {
+    fun createObject(objectRequest: String): ObjectWrapper? {
 
         val result = restClient.post()
             .uri("/objects")
@@ -34,7 +32,7 @@ class ObjectsAPIClient(
             .header("Content-Type", "application/json")
             .body(objectRequest)
             .retrieve()
-            .body(Results::class.java)
+            .body(ObjectWrapper::class.java)
 
         return result
     }
@@ -50,7 +48,7 @@ class ObjectsAPIClient(
         return result
     }
 
-    fun updateObject(objectUUID: String, objectRequest: String): Results? {
+    fun updateObject(objectUUID: String, objectRequest: String): ObjectWrapper? {
 
         val result = restClient.put()
             .uri("/objects/$objectUUID")
@@ -59,7 +57,7 @@ class ObjectsAPIClient(
             .header("Content-Type", "application/json")
             .body(objectRequest)
             .retrieve()
-            .body(Results::class.java)
+            .body(ObjectWrapper::class.java)
 
         return result
     }

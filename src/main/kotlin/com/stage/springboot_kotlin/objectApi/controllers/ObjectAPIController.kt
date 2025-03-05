@@ -1,5 +1,9 @@
-package com.stage.springboot_kotlin.objectApi
+package com.stage.springboot_kotlin.objectApi.controllers
 
+import com.stage.springboot_kotlin.objectApi.clients.GameData
+import com.stage.springboot_kotlin.objectApi.services.GameService
+import com.stage.springboot_kotlin.objectApi.clients.MovieData
+import com.stage.springboot_kotlin.objectApi.services.MovieService
 import org.springframework.web.bind.annotation.*
 
 @RestController

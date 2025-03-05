@@ -1,7 +1,11 @@
-package com.stage.springboot_kotlin.objectApi
+package com.stage.springboot_kotlin.objectApi.services
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import com.stage.springboot_kotlin.objectApi.clients.GameData
+import com.stage.springboot_kotlin.objectApi.clients.ObjectRecord
+import com.stage.springboot_kotlin.objectApi.clients.ObjectRequest
+import com.stage.springboot_kotlin.objectApi.clients.ObjectsAPIClient
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
 import java.time.LocalDate.now
